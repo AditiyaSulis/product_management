@@ -1,0 +1,753 @@
+{
+  "info": {
+    "name": "Product Management API",
+    "description": "Complete REST API for Product Management with Authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for user management",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"jhon_doe\",\n    \"password\": \"supersecret\",\n    \"password_confirmation\": \"supersecret\",\n    \"name\": \"Jhon Doe\",\n    \"email\": \"jhon@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user account\n\n**Rate Limit**: 3 requests per 60 seconds\n\n**Request Body**:\n- `username` (required): Unique username\n- `password` (required): Minimum 6 characters\n- `password_confirmation` (required): Must match password\n- `name` (optional): Full name\n- `email` (optional): Email address"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/register",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "register"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"User registered successfully\",\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"jhon_doe\",\n        \"name\": \"Jhon Doe\",\n        \"email\": \"jhon@example.com\",\n        \"updated_at\": \"2026-01-01T15:01:04.000000Z\",\n        \"created_at\": \"2026-01-01T15:01:04.000000Z\"\n    },\n    \"access_token\": \"1|abc123def456...\",\n    \"refresh_token\": \"2|xyz789ghi012...\",\n    \"token_type\": \"Bearer\"\n}"
+            },
+            {
+              "name": "Validation Error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/register",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "register"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"errors\": {\n        \"username\": [\"The username has already been taken.\"],\n        \"password\": [\"The password confirmation does not match.\"]\n    }\n}"
+            },
+            {
+              "name": "Too Many Requests",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/register",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "register"]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Too Many Attempts.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"jhon_doe\",\n    \"password\": \"supersecret\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login to get access token\n\n**Rate Limit**: 3 requests per 60 seconds\n\n**Request Body**:\n- `username` (required): Your username\n- `password` (required): Your password\n\n**Response**:\n- `access_token`: Use this for authenticated endpoints\n- `refresh_token`: Use this to refresh the access token"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Login successful\",\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"jhon_doe\",\n        \"name\": \"Jhon Doe\",\n        \"email\": \"jhon@example.com\",\n        \"last_login_at\": \"2026-01-01T15:01:04.000000Z\",\n        \"created_at\": \"2026-01-01T14:30:00.000000Z\",\n        \"updated_at\": \"2026-01-01T15:01:04.000000Z\"\n    },\n    \"access_token\": \"1|abc123def456...\",\n    \"refresh_token\": \"2|xyz789ghi012...\",\n    \"token_type\": \"Bearer\"\n}"
+            },
+            {
+              "name": "Invalid Credentials",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Invalid credentials\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Logout and invalidate current access token\n\n**Authentication**: Bearer Token required"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/logout",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "logout"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Logged out successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{refresh_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "refresh"]
+            },
+            "description": "Refresh the access token using refresh token\n\n**Authentication**: Bearer Token with refresh_token"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/refresh",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "refresh"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"access_token\": \"3|newtoken456...\",\n    \"refresh_token\": \"4|newrefreshtoken789...\",\n    \"token_type\": \"Bearer\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get authenticated user profile\n\n**Authentication**: Bearer Token required"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/me",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "me"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"id\": 1,\n    \"username\": \"jhon_doe\",\n    \"name\": \"Jhon Doe\",\n    \"email\": \"jhon@example.com\",\n    \"last_login_at\": \"2026-01-01T15:01:04.000000Z\",\n    \"created_at\": \"2026-01-01T14:30:00.000000Z\",\n    \"updated_at\": \"2026-01-01T15:01:04.000000Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Product management endpoints",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products?search=shirt&category=Clothes&limit=10&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "shirt",
+                  "description": "Search by product title (optional)"
+                },
+                {
+                  "key": "category",
+                  "value": "Clothes",
+                  "description": "Filter by category (optional)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page (default: 10)"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                }
+              ]
+            },
+            "description": "Get all products with optional filters and pagination\n\n**Query Parameters**:\n- `search` (optional): Search by product title\n- `category` (optional): Filter by category\n- `limit` (optional): Items per page (default: 10)\n- `page` (optional): Page number (default: 1)\n\n**Cache**: Response is cached for 60 seconds"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/products?search=shirt&category=Clothes&limit=10&page=1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products"],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "shirt"
+                    },
+                    {
+                      "key": "category",
+                      "value": "Clothes"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Awesome T-Shirt\",\n            \"price\": \"99.99\",\n            \"description\": \"High-quality cotton t-shirt\",\n            \"category\": \"Clothes\",\n            \"images\": [\"https://placeimg.com/640/480/any\"],\n            \"created_by\": \"jhon_doe\",\n            \"created_by_id\": 1,\n            \"updated_by\": \"jhon_doe\",\n            \"updated_by_id\": 1,\n            \"created_at\": \"2026-01-01T15:01:04.000000Z\",\n            \"updated_at\": \"2026-01-01T15:01:04.000000Z\"\n        }\n    ],\n    \"first_page_url\": \"{{base_url}}/api/products?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"{{base_url}}/api/products?page=1\",\n    \"next_page_url\": null,\n    \"path\": \"{{base_url}}/api/products\",\n    \"per_page\": 10,\n    \"prev_page_url\": null,\n    \"to\": 1,\n    \"total\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Single Product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "1"]
+            },
+            "description": "Get detailed information about a specific product\n\n**Cache**: Response is cached for 60 seconds"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/products/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"id\": 1,\n    \"title\": \"Awesome T-Shirt\",\n    \"price\": \"99.99\",\n    \"description\": \"High-quality cotton t-shirt\",\n    \"category\": \"Clothes\",\n    \"images\": [\"https://placeimg.com/640/480/any\"],\n    \"created_by\": \"jhon_doe\",\n    \"created_by_id\": 1,\n    \"updated_by\": \"jhon_doe\",\n    \"updated_by_id\": 1,\n    \"created_at\": \"2026-01-01T15:01:04.000000Z\",\n    \"updated_at\": \"2026-01-01T15:01:04.000000Z\"\n}"
+            },
+            {
+              "name": "Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/products/999",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "999"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Awesome T-Shirt\",\n    \"price\": 99.99,\n    \"description\": \"High-quality cotton t-shirt\",\n    \"category\": \"Clothes\",\n    \"images\": [\"https://placeimg.com/640/480/any\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Create a new product\n\n**Authentication**: Bearer Token required\n\n**Rate Limit**: 1 request per 5 seconds\n\n**Request Body**:\n- `title` (required): Product title\n- `price` (required): Product price\n- `category` (required): Product category\n- `images` (required): Array of image URLs (minimum 1)\n- `description` (optional): Product description"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product created successfully\",\n    \"data\": {\n        \"title\": \"Awesome T-Shirt\",\n        \"price\": \"99.99\",\n        \"description\": \"High-quality cotton t-shirt\",\n        \"category\": \"Clothes\",\n        \"images\": [\"https://placeimg.com/640/480/any\"],\n        \"created_by\": \"jhon_doe\",\n        \"created_by_id\": 1,\n        \"updated_by\": \"jhon_doe\",\n        \"updated_by_id\": 1,\n        \"updated_at\": \"2026-01-01T15:01:04.000000Z\",\n        \"created_at\": \"2026-01-01T15:01:04.000000Z\",\n        \"id\": 1\n    }\n}"
+            },
+            {
+              "name": "Validation Error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"errors\": {\n        \"title\": [\"The title field is required.\"],\n        \"images\": [\"The images field is required.\"]\n    }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Awesome T-Shirt Updated\",\n    \"price\": 89.99,\n    \"description\": \"Updated high-quality cotton t-shirt\",\n    \"category\": \"Clothes\",\n    \"images\": [\"https://placeimg.com/640/480/any\", \"https://placeimg.com/640/480/any/2\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "1"]
+            },
+            "description": "Update an existing product\n\n**Authentication**: Bearer Token required\n\n**Rate Limit**: 1 request per 5 seconds\n\n**Request Body**: All fields are optional\n- `title`: Product title\n- `price`: Product price\n- `category`: Product category\n- `images`: Array of image URLs\n- `description`: Product description"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/products/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product updated successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Awesome T-Shirt Updated\",\n        \"price\": \"89.99\",\n        \"description\": \"Updated high-quality cotton t-shirt\",\n        \"category\": \"Clothes\",\n        \"images\": [\"https://placeimg.com/640/480/any\", \"https://placeimg.com/640/480/any/2\"],\n        \"created_by\": \"jhon_doe\",\n        \"created_by_id\": 1,\n        \"updated_by\": \"jhon_doe\",\n        \"updated_by_id\": 1,\n        \"created_at\": \"2026-01-01T15:01:04.000000Z\",\n        \"updated_at\": \"2026-01-01T15:05:00.000000Z\"\n    }\n}"
+            },
+            {
+              "name": "Not Found",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/products/999",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "999"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "1"]
+            },
+            "description": "Delete a product\n\n**Authentication**: Bearer Token required\n\n**Rate Limit**: 1 request per 5 seconds"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/products/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product deleted successfully\"\n}"
+            },
+            {
+              "name": "Not Found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/products/999",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "products", "999"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"message\": \"Product not found\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
