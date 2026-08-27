@@ -1,0 +1,55 @@
+# Git
+.git
+.gitignore
+
+# PHP
+vendor/
+composer.phar
+composer.lock
+.env
+.env.*
+!.env.docker
+
+# Node
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+Thumbs.db
+
+# OS
+.DS_Store
+*.log
+
+# Laravel
+storage/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+bootstrap/cache/*.php
+
+# Testing
+coverage
+phpunit.xml
+.phpunit.result.cache
+tests/
+
+# Build
+public/build
+public/hot
+public/storage
+public/vendor
+
+# Misc
+*.sqlite
+*.sqlite-journal
+.docker
+Dockerfile
+docker-compose.yml
+README.md
